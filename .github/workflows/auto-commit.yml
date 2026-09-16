@@ -21,6 +21,40 @@ jobs:
           git config user.name "yogeshbhadoriya2056"
           git config user.email "yogeshbhadoriya2056@users.noreply.github.com"
 
+      - name: Generate 8 commits
+        run: |
+          for i in {1..8}
+          do
+            echo "$(date -u '+%Y-%m-%d %H:%M:%S UTC') - Daily activity #$i" >> daily-activity.log
+            git add daily-activity.log
+            git commit -m "Daily activity #$i"
+          done
+
+      - name: Push commits
+        run: |
+          git push origin main
+
+on:
+  schedule:
+    - cron: '17 20 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  daily-update:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Git
+        run: |
+          git config user.name "yogeshbhadoriya2056"
+          git config user.email "yogeshbhadoriya2056@users.noreply.github.com"
+
       - name: Update daily activity
         run: |
           echo "$(date -u '+%Y-%m-%d %H:%M:%S UTC') - Daily activity recorded" >> daily-activity.log
