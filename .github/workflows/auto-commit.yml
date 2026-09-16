@@ -1,35 +1,32 @@
-name: Daily Bright Commits
+name: Daily Activity
 
 on:
   schedule:
     - cron: '17 20 * * *'
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
-  build:
+  daily-update:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
       - name: Setup Git
         run: |
-          git config user.name "nishant4671"
-          git config user.email "nishantkr4671@gmail.com"
+          git config user.name "yogeshbhadoriya2056"
+          git config user.email "yogeshbhadoriya2056@users.noreply.github.com"
 
-      - name: Generate 8 Commits
+      - name: Update daily activity
         run: |
-          # Pull latest to avoid conflicts
-          git pull origin main --rebase || true
-          
-          # Loop 8 times for dark green
-          for i in {1..8}
-          do
-            echo "$(date) - CORRECT EMAIL - Commit #$i" >> daily-activity.log
-            git add daily-activity.log
-            git commit -m "Daily sync #$i"
-          done
-          
+          echo "$(date -u '+%Y-%m-%d %H:%M:%S UTC') - Daily activity recorded" >> daily-activity.log
+
+      - name: Commit and push
+        run: |
+          git add daily-activity.log
+          git commit -m "Daily activity update" || echo "No changes to commit"
           git push origin main
